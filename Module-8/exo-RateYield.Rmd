@@ -37,9 +37,10 @@ library(quadprog)
 ```
 
 # Time Value of Money (Van Horne)
- 
+
 Consider the following cash flow streams:
 
+```{=tex}
 \begin{table}[ht]
   \centering
 \begin{tabular}{llllll}
@@ -53,33 +54,64 @@ Z & 200 &     & 500 &     & 300 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
+```
+```{=tex}
 \begin{enumerate}
   \item Compute the future value of each stream at a compounded rate of 10\%.
   \item Compute the present value of each stream at a compounded rate of 14\%.
 \end{enumerate}
+```
+```{r}
+CF = rbind(c(100, 200, 200, 300, 300), 
+              c(600, 0, 0, 0, 0),
+              c(0, 0, 0, 0, 1200), 
+              c(200, 0, 500, 0, 300))
+              
+CF.fut = matrix(0, nrow = 4, ncol = 5)
+CF.pst = matrix(0, nrow = 4, ncol = 5)
 
+r.1 = 0.1
+r.2 = 0.14
+
+i = 0
+for (i in 1:ncol(CF)){
+  CF.fut[,i] <- CF[,i] * (1 + r.1)^(i)
+  CF.pst[,i] <- CF[,i] / (1 + r.2)^(i)
+}
+  
+print(CF.fut)
+print(CF.pst)
+
+```
 
 # Comparing contracts (Van Horne)
 
 On a contract, you have a choice of receiving 25,000 \euro in six years or 50,000 \euro in 12 years. At which compound annual rate would you be indifferent between the two options?
 
+```{r}
+amount.1 = 25000
+amount.2 = 50000
+y.1 = 6
+y.2 = 12 
+
+r.indiff = (amount.2/amount.1)^(1/(y.2 - y.1)) - 1
+print(r.indiff)
+```
 
 # Mortgage (Van Horne)
 
-You obtain a 10-year, 50,000 \euro\  loan. The compound annual interest rate is 8\%. The loan is paid back by 10 annual installments of 7,451.47 \euro. 
+You obtain a 10-year, 50,000 \euro  loan. The compound annual interest rate is 8%. The loan is paid back by 10 annual installments of 7,451.47 \euro.
 
+```{=tex}
 \begin{enumerate}
 \item How much of the first year payment is principal?
 \item How much total interest will be paid over the life of the loan?
 \end{enumerate}
-
+```
 # Savings Plan
 
-You need to have 50,000 \euro\  at the end of ten years. To accumulate this sum, you plan to save a certain amount at the end of each year, for the next ten years. The bank pays 8\% interest, compounded annually. How much should you save each year?
-
+You need to have 50,000 \euro  at the end of ten years. To accumulate this sum, you plan to save a certain amount at the end of each year, for the next ten years. The bank pays 8% interest, compounded annually. How much should you save each year?
 
 # Mortgage Paydown
 
-You have borrowed 14,300 \euro\  at a compound annual interest rate of 15\%. You can make annual payments of 3,000 \euro\  on your loan. How long will it be before your loan is completely paid down?
-
+You have borrowed 14,300 \euro  at a compound annual interest rate of 15%. You can make annual payments of 3,000 \euro  on your loan. How long will it be before your loan is completely paid down?
